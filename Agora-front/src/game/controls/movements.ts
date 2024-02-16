@@ -22,6 +22,11 @@ export const KEYS = {
   },
 }
 
+const initiatePlayerMovement = (player: Sprite, direction: Direction) => {
+  player.moving = true
+  player.image = player.playerSprites[direction]['moving']
+}
+
 export const handlePlayerMovement = (
   player: Sprite,
   direction: Direction,
@@ -29,8 +34,8 @@ export const handlePlayerMovement = (
   boundaries: Boundary[],
   movables: (Sprite | Boundary)[],
 ) => {
-  player.moving = true
-  player.image = player.playerSprites[direction]
+  initiatePlayerMovement(player, direction)
+
   for (let i = 0; i < boundaries.length; i++) {
     const boundary = boundaries[i]
     if (
@@ -56,4 +61,9 @@ export const handlePlayerMovement = (
     movable.position.x += positionChange.x
     movable.position.y += positionChange.y
   })
+}
+
+export const initiatePlayerIdle = (player: Sprite, direction: Direction) => {
+  player.moving = false
+  player.image = player.playerSprites[direction]['idle']
 }

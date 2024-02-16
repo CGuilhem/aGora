@@ -1,4 +1,8 @@
 import playerDown from '../../assets/characters/Player_Down_48x48_05.png'
+import playerIdleDown from '../../assets/characters/Player_Idle_Down_48x48_05.png'
+import playerIdleLeft from '../../assets/characters/Player_Idle_Left_48x48_05.png'
+import playerIdleRight from '../../assets/characters/Player_Idle_Right_48x48_05.png'
+import playerIdleUp from '../../assets/characters/Player_Idle_Up_48x48_05.png'
 import playerLeft from '../../assets/characters/Player_Left_48x48_05.png'
 import playerRight from '../../assets/characters/Player_Right_48x48_05.png'
 import playerUp from '../../assets/characters/Player_Up_48x48_05.png'
@@ -12,6 +16,10 @@ const imageSources = {
   playerUpImage: playerUp,
   playerLeftImage: playerLeft,
   playerRightImage: playerRight,
+  playerIdleDownImage: playerIdleDown,
+  playerIdleUpImage: playerIdleUp,
+  playerIdleLeftImage: playerIdleLeft,
+  playerIdleRightImage: playerIdleRight,
 }
 
 export const loadImage = (src: string): Promise<HTMLImageElement> => {

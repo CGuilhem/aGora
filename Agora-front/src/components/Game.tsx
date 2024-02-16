@@ -2,7 +2,12 @@ import { useEffect, useRef } from 'react'
 import { loadImages } from '../game/assetUtils/loading'
 import { Sprite } from '../game/classes/Sprite'
 import { createBoundaries } from '../game/collisions/collisions'
-import { KEYS, handlePlayerMovement, lastKey } from '../game/controls/movements'
+import {
+  KEYS,
+  handlePlayerMovement,
+  initiatePlayerIdle,
+  lastKey,
+} from '../game/controls/movements'
 import { handleKeyDown, handleKeyUp } from '../game/events/movements'
 import {
   CANVAS_HEIGHT,
@@ -40,11 +45,24 @@ const Game = () => {
             },
             scaling: IMAGE_SCALING_FACTOR,
             frames: { max: 6, value: 0, elapsed: 0 },
+            moving: false,
             playerSprites: {
-              up: images?.playerUpImage || new Image(),
-              down: images?.playerDownImage || new Image(),
-              left: images?.playerLeftImage || new Image(),
-              right: images?.playerRightImage || new Image(),
+              up: {
+                moving: images?.playerUpImage || new Image(),
+                idle: images?.playerIdleUpImage || new Image(),
+              },
+              down: {
+                moving: images?.playerDownImage || new Image(),
+                idle: images?.playerIdleDownImage || new Image(),
+              },
+              left: {
+                moving: images?.playerLeftImage || new Image(),
+                idle: images?.playerIdleLeftImage || new Image(),
+              },
+              right: {
+                moving: images?.playerRightImage || new Image(),
+                idle: images?.playerIdleRightImage || new Image(),
+              },
             },
           })
 
@@ -69,7 +87,23 @@ const Game = () => {
             player.draw(c)
             foreground.draw(c)
 
-            player.moving = false
+            switch (lastKey.value) {
+              case 'z':
+                initiatePlayerIdle(player, 'up')
+                break
+              case 's':
+                initiatePlayerIdle(player, 'down')
+                break
+              case 'q':
+                initiatePlayerIdle(player, 'left')
+                break
+              case 'd':
+                initiatePlayerIdle(player, 'right')
+                break
+              default:
+                initiatePlayerIdle(player, 'left')
+            }
+
             if (KEYS.z.pressed && lastKey.value === 'z') {
               handlePlayerMovement(
                 player,

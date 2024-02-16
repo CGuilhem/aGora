@@ -1,3 +1,4 @@
+import { PLAYER_IDLE_FRAMES, PLAYER_MOVING_FRAMES } from '../parameters'
 import { Frames, PlayerSprites, Position } from '../types'
 
 export class Sprite {
@@ -48,15 +49,15 @@ export class Sprite {
       this.height, // Destination height
     )
 
-    if (!this.moving) return
-
     if (this.frames.max > 1) {
       this.frames.elapsed++
     }
 
-    if (this.frames.elapsed % 20 === 0) {
-      if (this.frames.value < this.frames.max - 1) this.frames.value++
-      else this.frames.value = 0
+    const frameRate = this.moving ? PLAYER_MOVING_FRAMES : PLAYER_IDLE_FRAMES
+
+    if (this.frames.elapsed % frameRate === 0) {
+      this.frames.value =
+        this.frames.value < this.frames.max - 1 ? this.frames.value + 1 : 0
     }
   }
 }
