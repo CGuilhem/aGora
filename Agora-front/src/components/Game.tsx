@@ -15,6 +15,7 @@ import {
   IMAGE_SCALING_FACTOR,
   OFFSET,
 } from '../game/parameters'
+import { socket } from '../game/socket'
 
 const Game = () => {
   const ref = useRef<HTMLCanvasElement>(null)
@@ -29,6 +30,10 @@ const Game = () => {
 
       if (c !== null) {
         c.imageSmoothingEnabled = false
+
+        socket.onopen = () => {
+          console.log('Connected to the server')
+        }
 
         loadImages().then((images) => {
           const background = new Sprite({
@@ -148,6 +153,9 @@ const Game = () => {
 
     // Cleanup function in order to remove the event listener when the component unmounts
     return () => {
+      // socket.off('connect')
+      // socket.off('disconnect')
+      // socket.off('connect_error')
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
     }
