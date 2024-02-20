@@ -27,6 +27,11 @@ const initiatePlayerMovement = (player: Sprite, direction: Direction) => {
   player.image = player.playerSprites[direction]['moving']
 }
 
+export const initiatePlayerIdle = (player: Sprite, direction: Direction) => {
+  player.moving = false
+  player.image = player.playerSprites[direction]['idle']
+}
+
 export const handlePlayerMovement = (
   player: Sprite,
   direction: Direction,
@@ -61,9 +66,4 @@ export const handlePlayerMovement = (
     movable.position.x += positionChange.x
     movable.position.y += positionChange.y
   })
-}
-
-export const initiatePlayerIdle = (player: Sprite, direction: Direction) => {
-  player.moving = false
-  player.image = player.playerSprites[direction]['idle']
 }

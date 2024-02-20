@@ -92,6 +92,15 @@ const Game = () => {
             player.draw(c)
             foreground.draw(c)
 
+            // socket.send(
+            //   JSON.stringify({
+            //     type: 'playerMovement',
+            //     data: {
+            //       position: player.position,
+            //     },
+            //   }),
+            // )
+
             switch (lastKey.value) {
               case 'z':
                 initiatePlayerIdle(player, 'up')
