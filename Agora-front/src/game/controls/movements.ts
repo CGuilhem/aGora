@@ -38,6 +38,7 @@ export const handlePlayerMovement = (
   positionChange: Position,
   boundaries: Boundary[],
   movables: (Sprite | Boundary)[],
+  socket: WebSocket,
 ) => {
   initiatePlayerMovement(player, direction)
 
@@ -62,8 +63,15 @@ export const handlePlayerMovement = (
       return // Do not move
     }
   }
+
   movables.forEach((movable) => {
     movable.position.x += positionChange.x
     movable.position.y += positionChange.y
   })
+
+  socket.send(
+    JSON.stringify({
+      type: 'playerMovement' + direction,
+    }),
+  )
 }

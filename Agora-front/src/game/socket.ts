@@ -9,3 +9,8 @@ export const SOCKET_TYPES = {
 }
 
 export const socket = new WebSocket('ws://localhost:8080/ws')
+
+socket.onmessage = function (event) {
+  const message = JSON.parse(event.data)
+  console.log(message)
+}

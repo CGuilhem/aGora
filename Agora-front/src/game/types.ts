@@ -9,7 +9,7 @@ export type Frames = {
   elapsed: number
 }
 
-export type Direction = 'up' | 'down' | 'left' | 'right'
+export type Direction = 'Up' | 'Down' | 'Left' | 'Right'
 
 export type AnimationImages = {
   moving: HTMLImageElement

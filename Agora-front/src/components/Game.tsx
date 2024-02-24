@@ -52,19 +52,19 @@ const Game = () => {
             frames: { max: 6, value: 0, elapsed: 0 },
             moving: false,
             playerSprites: {
-              up: {
+              Up: {
                 moving: images?.playerUpImage || new Image(),
                 idle: images?.playerIdleUpImage || new Image(),
               },
-              down: {
+              Down: {
                 moving: images?.playerDownImage || new Image(),
                 idle: images?.playerIdleDownImage || new Image(),
               },
-              left: {
+              Left: {
                 moving: images?.playerLeftImage || new Image(),
                 idle: images?.playerIdleLeftImage || new Image(),
               },
-              right: {
+              Right: {
                 moving: images?.playerRightImage || new Image(),
                 idle: images?.playerIdleRightImage || new Image(),
               },
@@ -92,63 +92,58 @@ const Game = () => {
             player.draw(c)
             foreground.draw(c)
 
-            // socket.send(
-            //   JSON.stringify({
-            //     type: 'playerMovement',
-            //     data: {
-            //       position: player.position,
-            //     },
-            //   }),
-            // )
-
             switch (lastKey.value) {
               case 'z':
-                initiatePlayerIdle(player, 'up')
+                initiatePlayerIdle(player, 'Up')
                 break
               case 's':
-                initiatePlayerIdle(player, 'down')
+                initiatePlayerIdle(player, 'Down')
                 break
               case 'q':
-                initiatePlayerIdle(player, 'left')
+                initiatePlayerIdle(player, 'Left')
                 break
               case 'd':
-                initiatePlayerIdle(player, 'right')
+                initiatePlayerIdle(player, 'Right')
                 break
               default:
-                initiatePlayerIdle(player, 'left')
+                initiatePlayerIdle(player, 'Left')
             }
 
             if (KEYS.z.pressed && lastKey.value === 'z') {
               handlePlayerMovement(
                 player,
-                'up',
+                'Up',
                 { x: 0, y: 3 },
                 boundaries,
                 movables,
+                socket,
               )
             } else if (KEYS.s.pressed && lastKey.value === 's') {
               handlePlayerMovement(
                 player,
-                'down',
+                'Down',
                 { x: 0, y: -3 },
                 boundaries,
                 movables,
+                socket,
               )
             } else if (KEYS.q.pressed && lastKey.value === 'q') {
               handlePlayerMovement(
                 player,
-                'left',
+                'Left',
                 { x: 3, y: 0 },
                 boundaries,
                 movables,
+                socket,
               )
             } else if (KEYS.d.pressed && lastKey.value === 'd') {
               handlePlayerMovement(
                 player,
-                'right',
+                'Right',
                 { x: -3, y: 0 },
                 boundaries,
                 movables,
+                socket,
               )
             }
           }
