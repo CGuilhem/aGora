@@ -9,7 +9,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/CGuilhem/Agora/Agora-back/internal/client"
+	"github.com/CGuilhem/Agora/Agora-back/internal/player"
 	"github.com/CGuilhem/Agora/Agora-back/internal/room"
 	"github.com/gorilla/websocket"
 )
@@ -44,10 +44,10 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
     }
     defer ws.Close()
 
-    client := client.NewClient(ws)
+    player := player.NewPlayer(ws)
     log.Printf("New WebSocket connection: %s", ws.RemoteAddr())
-    lobby.Subscribe(client)
-    defer lobby.Unsubscribe(client)    
+    lobby.Subscribe(player)
+    defer lobby.Unsubscribe(player)    
     
 
     for {

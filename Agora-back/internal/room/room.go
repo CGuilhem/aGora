@@ -3,53 +3,53 @@ package room
 import (
 	"log"
 
-	"github.com/CGuilhem/Agora/Agora-back/internal/client"
+	"github.com/CGuilhem/Agora/Agora-back/internal/player"
 	"github.com/gorilla/websocket"
 )
 
 type Room struct {
 	id         string
-	clients    map[*client.Client]bool
+	players    map[*player.Player]bool
 	broadcast  chan []byte
-	register   chan *client.Client
-	unregister chan *client.Client
+	register   chan *player.Player
+	unregister chan *player.Player
 }
 
 func NewRoom(id string) *Room {
     return &Room{
 		id:         id,
-        clients:    make(map[*client.Client]bool),
+        players:    make(map[*player.Player]bool),
         broadcast:  make(chan []byte),
-        register:   make(chan *client.Client),
-        unregister: make(chan *client.Client),
+        register:   make(chan *player.Player),
+        unregister: make(chan *player.Player),
     }
 }
 
 func (r *Room) Run() {
 	for {
 		select {
-		case client := <-r.register:
-			r.clients[client] = true
-		case client := <-r.unregister:
-			delete(r.clients, client)
+		case player := <-r.register:
+			r.players[player] = true
+		case player := <-r.unregister:
+			delete(r.players, player)
 		case message := <-r.broadcast:
-			for client := range r.clients {
-				client.Lock()
-				client.Connection.WriteMessage(websocket.TextMessage, message)
-				client.Unlock()
+			for player := range r.players {
+				player.Lock()
+				player.Connection.WriteMessage(websocket.TextMessage, message)
+				player.Unlock()
 			}
 		}
 	}
 }
 
-func (r *Room) Subscribe(c *client.Client) {
-	r.register <- c
-	log.Printf("Client %s subscribed to room %s", c.Connection.RemoteAddr(), r.id)
+func (r *Room) Subscribe(p *player.Player) {
+	r.register <- p
+	log.Printf("Player %s subscribed to room %s", p.Connection.RemoteAddr(), r.id)
 }
 
-func (r *Room) Unsubscribe(c *client.Client) {
-	r.unregister <- c
-	log.Printf("Client %s unsubscribed from room %s", c.Connection.RemoteAddr(), r.id)
+func (r *Room) Unsubscribe(p *player.Player) {
+	r.unregister <- p
+	log.Printf("Player %s unsubscribed from room %s", p.Connection.RemoteAddr(), r.id)
 }
 
 func (r *Room) Broadcast(msg []byte) {
