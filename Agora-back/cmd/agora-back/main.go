@@ -14,7 +14,7 @@ import (
 
 
 func main() {
-    lobby := room.NewRoom("lobby")
+    lobby := room.NewRoom(room.LOBBY_ID)
     go lobby.Run()
 
     mux := http.NewServeMux()

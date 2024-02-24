@@ -12,6 +12,7 @@ export const PLAYER_IDLE_FRAMES: number = 40
 // Animation will be slower if the value is higher
 export const PLAYER_MOVING_FRAMES: number = 20
 
+// Position the player on the map during spaw
 export const OFFSET = {
   X: -1140,
   Y: -695,

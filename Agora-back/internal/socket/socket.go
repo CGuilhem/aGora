@@ -20,6 +20,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func HandleWebSocket(w http.ResponseWriter, r *http.Request, lobby *room.Room) {
+
 	wsConnection, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -28,7 +29,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request, lobby *room.Room) {
 	}
 	defer wsConnection.Close()
 
-	player := player.NewPlayer(wsConnection)
+	player := player.NewPlayer(wsConnection, lobby.Id)
 	log.Printf("New WebSocket connection: %s", wsConnection.RemoteAddr())
 	lobby.Subscribe(player)
 	defer lobby.Unsubscribe(player)
@@ -52,44 +53,19 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request, lobby *room.Room) {
 			switch message.Type {
 			case PLAYER_MOVEMENT_UP:
 				player.MoveUp()
+				BroadcastNewPosition(player, "up", lobby)
 
 			case PLAYER_MOVEMENT_DOWN:
 				player.MoveDown()
+				BroadcastNewPosition(player, "down", lobby)
 
 			case PLAYER_MOVEMENT_LEFT:
 				player.MoveLeft()
+				BroadcastNewPosition(player, "left", lobby)
 
 			case PLAYER_MOVEMENT_RIGHT:
 				player.MoveRight()
-			}
-
-			// Calculate new position...
-			newPosition := message.Data.Position
-			newPosition.X += 1 // Example: increment X by 1
-			newPosition.Y += 1 // Example: increment Y by 1
-
-			newMessage := Message{
-			    Type: "playerMovement",
-			    Data: struct {
-			        Position struct {
-			            X int `json:"x"`
-			            Y int `json:"y"`
-			        } `json:"position"`
-			    }{
-			        Position: newPosition,
-			    },
-			}
-
-			newMsg, err := json.Marshal(newMessage)
-			if err != nil {
-			    log.Println(err)
-			    break
-			}
-
-			err = player.Connection.WriteMessage(websocket.TextMessage, newMsg)
-			if err != nil {
-			    log.Println(err)
-			    break
+				BroadcastNewPosition(player, "right", lobby)
 			}
 		}
 	}

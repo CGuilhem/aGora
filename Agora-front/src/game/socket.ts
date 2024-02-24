@@ -1,7 +1,7 @@
 export const SOCKET_TYPES = {
+  HAS_MOVED: 'playerHasMoved',
   //   JOIN_GAME: 'JOIN_GAME',
   //   GAME_STATE: 'GAME_STATE',
-  //   MOVE: 'MOVE',
   //   GAME_OVER: 'GAME_OVER',
   //   RESET_GAME: 'RESET_GAME',
   //   LEAVE_GAME: 'LEAVE_GAME',

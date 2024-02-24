@@ -7,19 +7,26 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+const LOBBY_ID = "lobby"
+
+type BroadcastMessage struct {
+    Message     []byte
+    ExcludedPlayer *player.Player
+}
+
 type Room struct {
-	id         string
+	Id         string
 	players    map[*player.Player]bool
-	broadcast  chan []byte
+	broadcast  chan BroadcastMessage
 	register   chan *player.Player
 	unregister chan *player.Player
 }
 
 func NewRoom(id string) *Room {
     return &Room{
-		id:         id,
+		Id:         id,
         players:    make(map[*player.Player]bool),
-        broadcast:  make(chan []byte),
+        broadcast:  make(chan BroadcastMessage),
         register:   make(chan *player.Player),
         unregister: make(chan *player.Player),
     }
@@ -34,24 +41,29 @@ func (r *Room) Run() {
 			delete(r.players, player)
 		case message := <-r.broadcast:
 			for player := range r.players {
-				player.Lock()
-				player.Connection.WriteMessage(websocket.TextMessage, message)
-				player.Unlock()
+				if player != message.ExcludedPlayer {
+                    player.Lock()
+                    err := player.Connection.WriteMessage(websocket.TextMessage, message.Message)
+                    player.Unlock()
+                    if err != nil {
+                        log.Printf("Error broadcasting to player: %v", err)
+                    }
+                }
 			}
 		}
 	}
-}
+}  
 
 func (r *Room) Subscribe(p *player.Player) {
 	r.register <- p
-	log.Printf("Player %s subscribed to room %s", p.Connection.RemoteAddr(), r.id)
+	log.Printf("Player %s subscribed to room %s", p.Connection.RemoteAddr(), r.Id)
 }
 
 func (r *Room) Unsubscribe(p *player.Player) {
 	r.unregister <- p
-	log.Printf("Player %s unsubscribed from room %s", p.Connection.RemoteAddr(), r.id)
+	log.Printf("Player %s unsubscribed from room %s", p.Connection.RemoteAddr(), r.Id)
 }
 
-func (r *Room) Broadcast(msg []byte) {
-	r.broadcast <- msg
+func (r *Room) Broadcast(message []byte, excludedPlayer *player.Player) {
+	r.broadcast <- BroadcastMessage{Message: message, ExcludedPlayer: excludedPlayer}
 }

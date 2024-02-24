@@ -1,16 +1,14 @@
 package socket
 
-type Message struct {
-	Type string `json:"type"`
-	Data struct {
-		Position struct {
-			X int `json:"x"`
-			Y int `json:"y"`
-		} `json:"position"`
-	} `json:"data"`
-}
+const (
+	PLAYER_HAS_MOVED      = "playerHasMoved"
+	PLAYER_MOVEMENT_UP    = "playerMovementUp"
+	PLAYER_MOVEMENT_DOWN  = "playerMovementDown"
+	PLAYER_MOVEMENT_LEFT  = "playerMovementLeft"
+	PLAYER_MOVEMENT_RIGHT = "playerMovementRight"
+)
 
-var PLAYER_MOVEMENT_UP = "playerMovementUp"
-var PLAYER_MOVEMENT_DOWN = "playerMovementDown"
-var PLAYER_MOVEMENT_LEFT = "playerMovementLeft"
-var PLAYER_MOVEMENT_RIGHT = "playerMovementRight"
+type Message struct {
+	Type string      `json:"type"`
+	Data interface{} `json:"data"`
+}
