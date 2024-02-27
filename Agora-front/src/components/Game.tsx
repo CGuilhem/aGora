@@ -16,6 +16,7 @@ import {
   OFFSET,
 } from '../game/parameters'
 import { socket } from '../game/socket'
+import { Player } from '../game/classes/Player'
 
 const Game = () => {
   const ref = useRef<HTMLCanvasElement>(null)
@@ -42,7 +43,7 @@ const Game = () => {
             scaling: IMAGE_SCALING_FACTOR,
           })
 
-          const player = new Sprite({
+          const player = new Player({
             image: images?.playerLeftImage || new Image(),
             position: {
               x: canvas?.width / 2 - 288 / 12,
