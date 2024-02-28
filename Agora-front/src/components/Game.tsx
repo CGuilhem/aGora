@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { loadImages } from '../game/assetUtils/loading'
+import { images, loadImages } from '../game/assetUtils/loading'
 import { Sprite } from '../game/classes/Sprite'
 import { createBoundaries } from '../game/collisions/collisions'
 import {
@@ -15,9 +15,10 @@ import {
   IMAGE_SCALING_FACTOR,
   OFFSET,
 } from '../game/parameters'
-import { socket } from '../game/socket'
-import { Player } from '../game/classes/Player'
+import { getPlayersOnLine, socket } from '../game/socket'
 
+import { Player } from '../game/classes/Player'
+import Boundary from '../game/classes/Boundary'
 const Game = () => {
   const ref = useRef<HTMLCanvasElement>(null)
 
@@ -36,7 +37,7 @@ const Game = () => {
           console.log('Connected to the server')
         }
 
-        loadImages().then((images) => {
+        loadImages().then(() => {
           const background = new Sprite({
             image: images?.lobbyImage || new Image(),
             position: { x: OFFSET.X, y: OFFSET.Y },
@@ -80,7 +81,13 @@ const Game = () => {
 
           const boundaries = createBoundaries()
 
-          const movables = [background, foreground, ...boundaries]
+          // Idée: destructuration copie des objets ? Donc n'incrémente pas les bonnes positions ?
+          // const movables: (Boundary | Sprite | Player)[] = [
+          //   background,
+          //   foreground,
+          //   ...boundaries,
+          //   ...playersOnLine,
+          // ]
 
           const animate = () => {
             window.requestAnimationFrame(animate)
@@ -91,7 +98,19 @@ const Game = () => {
               boundary.draw(c)
             })
             player.draw(c)
+            const playersOnLine = getPlayersOnLine()
+            playersOnLine.forEach((playerOnline) => {
+              playerOnline.draw(c)
+            })
+
             foreground.draw(c)
+
+            const movables: (Boundary | Sprite | Player)[] = [
+              background,
+              foreground,
+              ...boundaries,
+              ...playersOnLine,
+            ]
 
             switch (lastKey.value) {
               case 'z':

@@ -1,4 +1,5 @@
 import Boundary from '../classes/Boundary'
+import { Player } from '../classes/Player'
 import { Sprite } from '../classes/Sprite'
 import { checkRectangularCollision } from '../collisions/collisions'
 import { Direction, Position } from '../types'
@@ -22,22 +23,22 @@ export const KEYS = {
   },
 }
 
-const initiatePlayerMovement = (player: Sprite, direction: Direction) => {
+const initiatePlayerMovement = (player: Player, direction: Direction) => {
   player.moving = true
   player.image = player.playerSprites[direction]['moving']
 }
 
-export const initiatePlayerIdle = (player: Sprite, direction: Direction) => {
+export const initiatePlayerIdle = (player: Player, direction: Direction) => {
   player.moving = false
   player.image = player.playerSprites[direction]['idle']
 }
 
 export const handlePlayerMovement = (
-  player: Sprite,
+  player: Player,
   direction: Direction,
   positionChange: Position,
   boundaries: Boundary[],
-  movables: (Sprite | Boundary)[],
+  movables: (Sprite | Boundary | Player)[],
   socket: WebSocket,
 ) => {
   initiatePlayerMovement(player, direction)
@@ -65,8 +66,14 @@ export const handlePlayerMovement = (
   }
 
   movables.forEach((movable) => {
-    movable.position.x += positionChange.x
-    movable.position.y += positionChange.y
+    if (movable instanceof Player) {
+      // Don't have the explanation yet
+      movable.position.x += positionChange.x / 2
+      movable.position.y += positionChange.y / 2
+    } else {
+      movable.position.x += positionChange.x
+      movable.position.y += positionChange.y
+    }
   })
 
   socket.send(

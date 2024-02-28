@@ -11,8 +11,8 @@ export class Player extends Sprite {
     image,
     scaling,
     position,
-    frames = { max: 1, value: 0, elapsed: 0 },
-    moving = false,
+    frames,
+    moving,
     playerSprites,
   }: {
     image: HTMLImageElement

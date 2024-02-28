@@ -12,11 +12,11 @@ import (
 )
 
 var upgrader = websocket.Upgrader{
-    ReadBufferSize:  1024,
-    WriteBufferSize: 1024,
-    CheckOrigin: func(r *http.Request) bool {
-        return true
-    },
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
 }
 
 func HandleWebSocket(w http.ResponseWriter, r *http.Request, lobby *room.Room) {
@@ -33,6 +33,8 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request, lobby *room.Room) {
 	log.Printf("New WebSocket connection: %s", wsConnection.RemoteAddr())
 	lobby.Subscribe(player)
 	defer lobby.Unsubscribe(player)
+
+	BroadcastNewPlayer(player, lobby)
 
 	for {
 		_, msg, err := player.Connection.ReadMessage()

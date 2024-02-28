@@ -22,7 +22,11 @@ const imageSources = {
   playerIdleRightImage: playerIdleRight,
 }
 
-export const loadImage = (src: string): Promise<HTMLImageElement> => {
+export let images: {
+  [k: string]: HTMLImageElement | undefined
+}
+
+const loadImage = (src: string): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.src = src
@@ -38,11 +42,11 @@ export const loadImages = async () => {
     )
 
     // Create an object where the keys are the image names and the values are the loaded images
-    const images = Object.fromEntries(
+    const imagesObject = Object.fromEntries(
       Object.keys(imageSources).map((key, i) => [key, loadedImages[i]]),
     )
 
-    return images
+    images = imagesObject
   } catch (error) {
     console.error('Error loading images:', error)
   }

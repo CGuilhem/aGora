@@ -12,17 +12,19 @@ type Position struct {
 }
 
 type Player struct {
-	RoomId string
-	Position Position
+	PlayerId   string
+	RoomId     string
+	Position   Position
 	Connection *websocket.Conn
 	sync.Mutex
 }
 
 func NewPlayer(wsConnection *websocket.Conn, roomId string) *Player {
 	return &Player{
-		Position: Position{X: 0, Y: 0},
+		PlayerId:  wsConnection.RemoteAddr().String(),
+		Position:   Position{X: -1140, Y: -695},
 		Connection: wsConnection,
-		RoomId: roomId,
+		RoomId:     roomId,
 	}
 }
 

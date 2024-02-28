@@ -1,6 +1,8 @@
 package socket
 
 const (
+	PLAYER_JOINED         = "playerJoined"
+	PLAYER_LEFT           = "playerLeft"
 	PLAYER_HAS_MOVED      = "playerHasMoved"
 	PLAYER_MOVEMENT_UP    = "playerMovementUp"
 	PLAYER_MOVEMENT_DOWN  = "playerMovementDown"
