@@ -2,12 +2,7 @@ import { useEffect, useRef } from 'react'
 import { images, loadImages } from '../game/assetUtils/loading'
 import { Sprite } from '../game/classes/Sprite'
 import { createBoundaries } from '../game/collisions/collisions'
-import {
-  KEYS,
-  handlePlayerMovement,
-  initiatePlayerIdle,
-  lastKey,
-} from '../game/controls/movements'
+import { KEYS, handlePlayerMovement, lastKey } from '../game/controls/movements'
 import { handleKeyDown, handleKeyUp } from '../game/events/movements'
 import {
   CANVAS_HEIGHT,
@@ -114,19 +109,19 @@ const Game = () => {
 
             switch (lastKey.value) {
               case 'z':
-                initiatePlayerIdle(player, 'Up')
+                player.initiatePlayerIdleAnimation('Up')
                 break
               case 's':
-                initiatePlayerIdle(player, 'Down')
+                player.initiatePlayerIdleAnimation('Down')
                 break
               case 'q':
-                initiatePlayerIdle(player, 'Left')
+                player.initiatePlayerIdleAnimation('Left')
                 break
               case 'd':
-                initiatePlayerIdle(player, 'Right')
+                player.initiatePlayerIdleAnimation('Right')
                 break
               default:
-                initiatePlayerIdle(player, 'Left')
+                player.initiatePlayerIdleAnimation('Left')
             }
 
             if (KEYS.z.pressed && lastKey.value === 'z') {

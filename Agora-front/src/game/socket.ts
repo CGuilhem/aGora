@@ -1,6 +1,5 @@
 import { images } from './assetUtils/loading'
 import { Player } from './classes/Player'
-import { initiatePlayerIdle } from './controls/movements'
 import { IMAGE_SCALING_FACTOR } from './parameters'
 import { Position } from './types'
 
@@ -68,7 +67,7 @@ socket.onmessage = function (event) {
     updatePlayersOnLine()
     playersOnLine.forEach((player) => {
       // Maybe refacto to move that function into the class Player
-      initiatePlayerIdle(player, 'Left')
+      player.initiatePlayerIdleAnimation('Left')
     })
     console.log(playersOnLine)
   }

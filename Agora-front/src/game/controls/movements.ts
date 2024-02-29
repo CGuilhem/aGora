@@ -23,16 +23,6 @@ export const KEYS = {
   },
 }
 
-const initiatePlayerMovement = (player: Player, direction: Direction) => {
-  player.moving = true
-  player.image = player.playerSprites[direction]['moving']
-}
-
-export const initiatePlayerIdle = (player: Player, direction: Direction) => {
-  player.moving = false
-  player.image = player.playerSprites[direction]['idle']
-}
-
 export const handlePlayerMovement = (
   player: Player,
   direction: Direction,
@@ -41,7 +31,7 @@ export const handlePlayerMovement = (
   movables: (Sprite | Boundary | Player)[],
   socket: WebSocket,
 ) => {
-  initiatePlayerMovement(player, direction)
+  player.initiatePlayerMovementAnimation(direction)
 
   for (let i = 0; i < boundaries.length; i++) {
     const boundary = boundaries[i]

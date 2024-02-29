@@ -1,5 +1,5 @@
 import { PLAYER_MOVING_FRAMES, PLAYER_IDLE_FRAMES } from '../parameters'
-import { Frames, PlayerSprites, Position } from '../types'
+import { Direction, Frames, PlayerSprites, Position } from '../types'
 import { Sprite } from './Sprite'
 
 export class Player extends Sprite {
@@ -29,6 +29,16 @@ export class Player extends Sprite {
     this.playerSprites = playerSprites as PlayerSprites
   }
 
+  initiatePlayerMovementAnimation = (direction: Direction) => {
+    this.moving = true
+    this.image = this.playerSprites[direction]['moving']
+  }
+
+  initiatePlayerIdleAnimation = (direction: Direction) => {
+    this.moving = false
+    this.image = this.playerSprites[direction]['idle']
+  }
+
   draw(c: CanvasRenderingContext2D) {
     c.drawImage(
       this.image,
@@ -48,6 +58,7 @@ export class Player extends Sprite {
 
     const frameRate = this.moving ? PLAYER_MOVING_FRAMES : PLAYER_IDLE_FRAMES
 
+    // Movement or Idle animation speed
     if (this.frames.elapsed % frameRate === 0) {
       this.frames.value =
         this.frames.value < this.frames.max - 1 ? this.frames.value + 1 : 0
